@@ -1,0 +1,160 @@
+/* Estilos generales para el cuerpo de la página */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('imagen.jpg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #ffffff;
+}
+
+/* Encabezado */
+h1 {
+    text-align: center;
+    margin-top: 120px;
+    color: #BA007C;
+    margin-left: 1px;
+}
+
+/* Estilo específico para el botón "Iniciar Transcripción" */
+#grabarBtn {
+    padding: 10px 20px;
+    background-color: #00529c;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-trim: 10px;
+    position: fixed;  /* Fijarlo en la página */
+    bottom: 450px;     /* A 20px desde el fondo */
+    right: 800px;      /* A 20px desde el borde derecho */
+    z-index: 1;      /* Asegura que esté por encima de otros elementos */
+}
+
+#grabarBtn:hover {
+    background-color: #6b1521; /* Para cambiar el color del botón cuando el mouse está por encima */
+}
+
+/* Estilo específico para el botón "Exportar a Word" */
+#exportarWord {
+    padding: 10px 20px;
+    background-color: #00529c;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-trim: 10px;
+    position: fixed;  /* Fijarlo en la página */
+    bottom: 450px;     /* A 20px desde el fondo */
+    right: 380px;      /* A 20px desde el borde derecho */
+    z-index: 1;      /* Asegura que esté por encima de otros elementos */
+}
+
+#exportarWord:hover {
+    background-color: #45a049; /* Cambio de color cuando el mouse está sobre el botón */
+}
+
+/* Estilo específico para el botón "Mostrar Comandos" */
+#mostrarComandosBtn {
+    padding: 10px 20px;
+    background-color: #00529c;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    position: fixed;
+    top: 10px;
+    right:  10px; 
+}
+
+#mostrarComandosBtn:hover {
+    background-color: #6b1521;
+}
+
+/* Contenedor para el botón de agregar comando y la caja de texto */
+#agregarComandoContainer {
+    position: fixed;
+    bottom: 20px; /* A 20px desde la parte inferior */
+    left: 20px;   /* A 20px desde la parte izquierda */
+    z-index: 10;  /* Asegura que esté por encima de otros elementos */
+    display: flex;
+    flex-direction: column;  /* Pone los elementos uno debajo del otro */
+    align-items: flex-start;  /* Alinea los elementos a la izquierda */
+}
+
+/* Estilo específico para el botón "Agregar Comando" */
+#agregarComandoBtn {
+    padding: 10px 20px;
+    background-color: #00529c;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-bottom: 10px; /* Espacio entre el botón y la caja de texto */
+    
+}
+
+#agregarComandoBtn:hover {
+    background-color: #6b1521;
+}
+
+/* Estilo específico para la caja de texto */
+#comandoTexto {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px; /* Tamaño adecuado para la caja de texto */
+    margin-bottom: 10px; /* Espacio entre la caja de texto y el botón */
+    position: fixed;  /* Fijarlo en la página */
+    bottom: 20px;     /* A 20px desde el fondo */
+    right: 920px;      /* A 20px desde el borde derecho */
+    z-index: 1;      /* Asegura que esté por encima de otros elementos */
+}
+
+/* Contenedor de transcripción */
+#transcripcionMicrofono {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 160px; /* Ajusta este valor para que empiece justo debajo del botón */
+    margin-top: 80px;
+    margin-left: 100px;
+    width: 80%; /* O cualquier otro porcentaje que desees para el ancho */
+}
+
+/* Contenedor de comandos */
+#comandosContainer {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 150px;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsividad */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    button {
+        width: 100%;
+    }
+}

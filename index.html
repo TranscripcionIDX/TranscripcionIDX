@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcripción de Audio</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <h1>Transcripción de Audio en Tiempo Real</h1>
+    <button id="grabarBtn">Iniciar Transcripción</button>
+    <button id="exportarWord" style="display: none;">Exportar a Word</button>
+    <p id="transcripcionMicrofono"></p>
+    
+    <button id="mostrarComandosBtn" style="position: absolute; top: 10px; right: 10px;">Comandos</button>
+    <div id="comandosContainer">
+        <h2>Comandos Agregados</h2>
+        <ul id="listaComandos"></ul>
+    </div>
+    
+    <!-- Contenedor para el botón y el campo de texto de "Agregar Comando" -->
+    <div id="agregarComandoContainer">
+        <h2>Agregar Comandos de Voz</h2>
+        <input type="text" id="comandoTexto" placeholder="Ejemplo: 'coma' , ','">
+        <button id="agregarComandoBtn">Agregar Comando</button>
+    </div>
+    
+    <script>
+        let comandos = { "coma": ",", "punto": "." };
+        let recognition;
+        let grabando = false;
+        
+        document.getElementById('grabarBtn').addEventListener('click', function() {
+            let boton = this;
+            grabando = !grabando;
+            boton.textContent = grabando ? 'Detener Transcripción' : 'Iniciar Transcripción';
+            let transcripcionMicrofono = document.getElementById('transcripcionMicrofono');
+            let exportarBtn = document.getElementById('exportarWord');
+            
+            if (grabando) {
+                if (!('webkitSpeechRecognition' in window)) {
+                    alert("Tu navegador no soporta reconocimiento de voz. Usa Google Chrome.");
+                    return;
+                }
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'es-ES';
+                recognition.onresult = function(event) {
+                    let texto = "";
+                    for (let i = 0; i < event.results.length; i++) {
+                        let transcript = event.results[i][0].transcript.toLowerCase();
+                        transcript = transcript.replace(/\.+$/, "");
+                        for (let comando in comandos) {
+                            transcript = transcript.replace(new RegExp(comando, "g"), comandos[comando]);
+                        }
+                        texto += transcript + " ";
+                    }
+                    transcripcionMicrofono.textContent = texto.trim();
+                };
+                recognition.onend = function() {
+                    if (grabando) {
+                        recognition.start();
+                    }
+                };
+                recognition.start();
+            } else {
+                recognition.stop();
+                exportarBtn.style.display = 'inline';
+            }
+        });
+
+        document.getElementById('exportarWord').addEventListener('click', function() {
+            let texto = document.getElementById('transcripcionMicrofono').textContent;
+            let blob = new Blob([texto], { type: 'application/msword' });
+            saveAs(blob, "transcripcion.docx");
+        });
+
+        document.getElementById('agregarComandoBtn').addEventListener('click', function() {
+            let input = document.getElementById('comandoTexto').value.split(',');
+            if (input.length === 2) {
+                let comando = input[0].trim().toLowerCase();
+                let simbolo = input[1].trim();
+                comandos[comando] = simbolo;
+                actualizarListaComandos();
+            } else {
+                alert("Formato incorrecto. Usa: 'palabra', 'símbolo'");
+            }
+        });
+
+        document.getElementById('mostrarComandosBtn').addEventListener('click', function() {
+            let container = document.getElementById('comandosContainer');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        });
+
+        function actualizarListaComandos() {
+            let lista = document.getElementById('listaComandos');
+            lista.innerHTML = "";
+            for (let comando in comandos) {
+                let li = document.createElement('li');
+                li.textContent = `${comando} → ${comandos[comando]}`;
+                lista.appendChild(li);
+            }
+        }
+
+        actualizarListaComandos();
+    </script>
+</body>
+</html>

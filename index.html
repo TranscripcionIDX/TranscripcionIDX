@@ -11,6 +11,7 @@
     <h1>Transcripción de Audio en Tiempo Real</h1>
     <button id="grabarBtn">Iniciar Transcripción</button>
     <button id="exportarWord" style="display: none;">Exportar a Word</button>
+    <button id="copiarTexto" style="display: none;">Copiar al Portapapeles</button>
     <p id="transcripcionMicrofono"></p>
     
     <button id="mostrarComandosBtn" style="position: absolute; top: 10px; right: 10px;">Comandos</button>
@@ -37,6 +38,7 @@
             boton.textContent = grabando ? 'Detener Transcripción' : 'Iniciar Transcripción';
             let transcripcionMicrofono = document.getElementById('transcripcionMicrofono');
             let exportarBtn = document.getElementById('exportarWord');
+            let copiarBtn = document.getElementById('copiarTexto');
             
             if (grabando) {
                 if (!('webkitSpeechRecognition' in window)) {
@@ -68,6 +70,7 @@
             } else {
                 recognition.stop();
                 exportarBtn.style.display = 'inline';
+                copiarBtn.style.display = 'inline';
             }
         });
 
@@ -75,6 +78,28 @@
             let texto = document.getElementById('transcripcionMicrofono').textContent;
             let blob = new Blob([texto], { type: 'application/msword' });
             saveAs(blob, "transcripcion.docx");
+        });
+
+        // Función para copiar el texto al portapapeles
+        document.getElementById('copiarTexto').addEventListener('click', function() {
+            let texto = document.getElementById('transcripcionMicrofono').textContent;
+            let botonCopiar = this;
+
+            if (texto) {
+                navigator.clipboard.writeText(texto).then(function() {
+                    // Cambiar el texto del botón y agregar la palomita
+                    botonCopiar.innerHTML = '✔ Copiado';
+                    botonCopiar.style.backgroundColor = '#4CAF50';  // Cambiar color a verde
+
+                    // Después de 2 segundos, restaurar el estado original del botón
+                    setTimeout(function() {
+                        botonCopiar.innerHTML = 'Copiar al Portapapeles';
+                        botonCopiar.style.backgroundColor = '#00529c';  // Color original
+                    }, 2000);
+                }).catch(function(error) {
+                    alert('Error al copiar el texto: ' + error);
+                });
+            }
         });
 
         document.getElementById('agregarComandoBtn').addEventListener('click', function() {

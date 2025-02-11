@@ -146,6 +146,27 @@ h1 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Estilo específico para el botón "Copiar al Portapapeles" */
+#copiarTexto {
+    padding: 10px 20px;
+    background-color: #00529c;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-trim: 10px;
+    position: fixed;  /* Fijarlo en la página */
+    bottom: 30px;     /* A 20px desde el fondo */
+    right: 600px;      /* A 20px desde el borde derecho */
+    z-index: 1;      /* Asegura que esté por encima de otros elementos */
+}
+
+#copiarTexto:hover {
+    background-color: #45a049; /* Cambio de color cuando el mouse está sobre el botón */
+}
+
 /* Responsividad */
 @media (max-width: 600px) {
     body {

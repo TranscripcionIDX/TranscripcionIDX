@@ -1,85 +1,61 @@
-/* Estilos generales para el cuerpo de la página */
+/* General */
 body {
     font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #d6e8fc, #ffffff); /* Fondo degradado */
     margin: 0;
     padding: 0;
-    background-image: url('imagen.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-color: #ffffff;
-}
-
-h1 {
     text-align: center;
-    margin-top: 84px;
-    color: #BA007C;
-    margin-left: 300px;
 }
 
-/* Contenedor del editor */
+/* Contenedor principal */
+.container {
+    width: 80%;
+    margin: auto;
+    padding-top: 20px;
+}
+
+/* Editor de texto */
 #editor-container {
-    max-width: 800px;
+    max-width: 90%;
+    width: 800px;
     margin: 20px auto;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Editor de texto de Quill */
-#editor {
-    height: 300px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background: white; /* Fondo blanco */
+    padding: 10px;
+    text-align: left;
+}
+
+/* Editor interno */
+#editor {
+    height: 300px;
+    border: 1px solid #ddd;
+    padding: 10px;
     background: white;
 }
 
-/* Estilos para los botones */
+/* Botones */
 button {
-    display: block;
-    width: 200px;
-    padding: 10px;
-    margin: 10px auto;
-    font-size: 16px;
+    background-color: #0056b3;
     color: white;
-    background-color: #00529c;
     border: none;
-    border-radius: 50px;
+    padding: 10px 20px;
+    margin: 10px;
     cursor: pointer;
-    transition: background 0.3s;
+    border-radius: 5px;
 }
 
 button:hover {
-    background-color: #6b1521;
+    background-color: #003d82;
 }
 
-/* Contenedor de comandos */
-#comandosContainer {
-    display: none;
-    position: absolute;
-    top: 50px;
-    right: 150px;
-    background: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* Tablas dentro del editor */
+table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-/* Responsividad */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-    h1 {
-        font-size: 24px;
-    }
-    button {
-        width: 100%;
-    }
-    #editor-container {
-        width: 100%;
-    }
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
 }

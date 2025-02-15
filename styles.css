@@ -11,126 +11,49 @@ body {
     background-color: #ffffff;
 }
 
-/* Encabezado */
+
 h1 {
     text-align: center;
-    margin-top: 120px;
+    margin-top: 84px;
     color: #BA007C;
-    margin-left: 1px;
+    margin-left: 300px;
 }
 
-/* Estilo específico para el botón "Iniciar Transcripción" */
-#grabarBtn {
-    padding: 10px 20px;
-    background-color: #00529c;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    margin-trim: 10px;
-    position: fixed;  /* Fijarlo en la página */
-    bottom: 450px;     /* A 20px desde el fondo */
-    right: 800px;      /* A 20px desde el borde derecho */
-    z-index: 1;      /* Asegura que esté por encima de otros elementos */
-}
-
-#grabarBtn:hover {
-    background-color: #6b1521; /* Para cambiar el color del botón cuando el mouse está por encima */
-}
-
-/* Estilo específico para el botón "Exportar a Word" */
-#exportarWord {
-    padding: 10px 20px;
-    background-color: #00529c;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    margin-trim: 10px;
-    position: fixed;  /* Fijarlo en la página */
-    bottom: 450px;     /* A 20px desde el fondo */
-    right: 380px;      /* A 20px desde el borde derecho */
-    z-index: 1;      /* Asegura que esté por encima de otros elementos */
-}
-
-#exportarWord:hover {
-    background-color: #45a049; /* Cambio de color cuando el mouse está sobre el botón */
-}
-
-/* Estilo específico para el botón "Mostrar Comandos" */
-#mostrarComandosBtn {
-    padding: 10px 20px;
-    background-color: #00529c;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    position: fixed;
-    top: 10px;
-    right:  10px; 
-}
-
-#mostrarComandosBtn:hover {
-    background-color: #6b1521;
-}
-
-/* Contenedor para el botón de agregar comando y la caja de texto */
-#agregarComandoContainer {
-    position: fixed;
-    bottom: 20px; /* A 20px desde la parte inferior */
-    left: 20px;   /* A 20px desde la parte izquierda */
-    z-index: 10;  /* Asegura que esté por encima de otros elementos */
-    display: flex;
-    flex-direction: column;  /* Pone los elementos uno debajo del otro */
-    align-items: flex-start;  /* Alinea los elementos a la izquierda */
-}
-
-/* Estilo específico para el botón "Agregar Comando" */
-#agregarComandoBtn {
-    padding: 10px 20px;
-    background-color: #00529c;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    margin-bottom: 10px; /* Espacio entre el botón y la caja de texto */
-    
-}
-
-#agregarComandoBtn:hover {
-    background-color: #6b1521;
-}
-
-/* Estilo específico para la caja de texto */
-#comandoTexto {
+/* Contenedor del editor */
+#editor-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.9);
     padding: 10px;
-    font-size: 16px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Editor de texto de Quill */
+#editor {
+    height: 300px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 200px; /* Tamaño adecuado para la caja de texto */
-    margin-bottom: 10px; /* Espacio entre la caja de texto y el botón */
-    position: fixed;  /* Fijarlo en la página */
-    bottom: 20px;     /* A 20px desde el fondo */
-    right: 920px;      /* A 20px desde el borde derecho */
-    z-index: 1;      /* Asegura que esté por encima de otros elementos */
+    background: white;
 }
 
-/* Contenedor de transcripción */
-#transcripcionMicrofono {
-    text-align: center;
-    font-weight: bold;
-    margin-top: 160px; /* Ajusta este valor para que empiece justo debajo del botón */
-    margin-top: 80px;
-    margin-left: 100px;
-    width: 80%; /* O cualquier otro porcentaje que desees para el ancho */
+/* Estilos para los botones */
+button {
+    display: block;
+    width: 200px;
+    padding: 10px;
+    margin: 10px auto;
+    font-size: 16px;
+    color: white;
+    background-color: #00529c;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #6b1521;
 }
 
 /* Contenedor de comandos */
@@ -146,27 +69,6 @@ h1 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo específico para el botón "Copiar al Portapapeles" */
-#copiarTexto {
-    padding: 10px 20px;
-    background-color: #00529c;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    margin-trim: 10px;
-    position: fixed;  /* Fijarlo en la página */
-    bottom: 30px;     /* A 20px desde el fondo */
-    right: 600px;      /* A 20px desde el borde derecho */
-    z-index: 1;      /* Asegura que esté por encima de otros elementos */
-}
-
-#copiarTexto:hover {
-    background-color: #45a049; /* Cambio de color cuando el mouse está sobre el botón */
-}
-
 /* Responsividad */
 @media (max-width: 600px) {
     body {
@@ -176,6 +78,9 @@ h1 {
         font-size: 24px;
     }
     button {
+        width: 100%;
+    }
+    #editor-container {
         width: 100%;
     }
 }

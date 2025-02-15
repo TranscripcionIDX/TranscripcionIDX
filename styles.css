@@ -4,13 +4,12 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('imagen.jpg');
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-color: #ffffff;
 }
-
 
 h1 {
     text-align: center;

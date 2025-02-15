@@ -3,48 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transcripción de Audio</title>
+    <title>Transcriptor con Editor</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
-    <h1>Transcripción de Audio en Tiempo Real</h1>
-    <button id="grabarBtn">Iniciar Transcripción</button>
-    <button id="exportarWord" style="display: none;">Exportar a Word</button>
-    <button id="copiarTexto" style="display: none;">Copiar al Portapapeles</button>
-    <p id="transcripcionMicrofono"></p>
+    <h1>Transcriptor de Voz</h1>
     
-    <button id="mostrarComandosBtn" style="position: absolute; top: 10px; right: 10px;">Comandos</button>
-    <div id="comandosContainer">
+    <button id="grabarBtn">Iniciar Transcripción</button>
+    <button id="copiarTexto">Copiar Texto</button>
+    <span id="mensajeCopiado" style="display: none; color: green; font-weight: bold;">✔ Texto copiado</span>
+    <button id="mostrarComandosBtn">Ver Comandos</button>
+    
+    <div id="editor-container">
+        <div id="editor"></div>
+    </div>
+    
+    <div id="comandosContainer" style="display: none;">
         <h2>Comandos Agregados</h2>
         <ul id="listaComandos"></ul>
     </div>
     
-    <!-- Contenedor para el botón y el campo de texto de "Agregar Comando" -->
     <div id="agregarComandoContainer">
         <h2>Agregar Comandos de Voz</h2>
         <input type="text" id="comandoTexto" placeholder="Ejemplo: 'coma' , ','">
         <button id="agregarComandoBtn">Agregar Comando</button>
     </div>
     
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
-        let comandos = { "coma": ",", "punto": "." };
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Escribe aquí o usa la transcripción...'
+        });
+
         let recognition;
         let grabando = false;
-        
-        document.getElementById('grabarBtn').addEventListener('click', function() {
-            let boton = this;
+        let comandos = { "coma": ",", "punto": "." };
+
+        document.getElementById("grabarBtn").addEventListener("click", function() {
             grabando = !grabando;
-            boton.textContent = grabando ? 'Detener Transcripción' : 'Iniciar Transcripción';
-            let transcripcionMicrofono = document.getElementById('transcripcionMicrofono');
-            let exportarBtn = document.getElementById('exportarWord');
-            let copiarBtn = document.getElementById('copiarTexto');
+            this.textContent = grabando ? "Detener Transcripción" : "Iniciar Transcripción";
             
-            if (grabando) {
-                if (!('webkitSpeechRecognition' in window)) {
-                    alert("Tu navegador no soporta reconocimiento de voz. Usa Google Chrome.");
-                    return;
-                }
+            if (!recognition) {
                 recognition = new webkitSpeechRecognition();
                 recognition.continuous = true;
                 recognition.interimResults = true;
@@ -53,57 +54,31 @@
                     let texto = "";
                     for (let i = 0; i < event.results.length; i++) {
                         let transcript = event.results[i][0].transcript.toLowerCase();
-                        transcript = transcript.replace(/\.+$/, "");
                         for (let comando in comandos) {
                             transcript = transcript.replace(new RegExp(comando, "g"), comandos[comando]);
                         }
                         texto += transcript + " ";
                     }
-                    transcripcionMicrofono.textContent = texto.trim();
+                    quill.root.innerHTML = texto.trim();
                 };
                 recognition.onend = function() {
-                    if (grabando) {
-                        recognition.start();
-                    }
+                    if (grabando) recognition.start();
                 };
-                recognition.start();
-            } else {
-                recognition.stop();
-                exportarBtn.style.display = 'inline';
-                copiarBtn.style.display = 'inline';
             }
+            grabando ? recognition.start() : recognition.stop();
         });
 
-        document.getElementById('exportarWord').addEventListener('click', function() {
-            let texto = document.getElementById('transcripcionMicrofono').textContent;
-            let blob = new Blob([texto], { type: 'application/msword' });
-            saveAs(blob, "transcripcion.docx");
+        document.getElementById("copiarTexto").addEventListener("click", function() {
+            let contenido = quill.root.innerText;
+            navigator.clipboard.writeText(contenido).then(() => {
+                let mensaje = document.getElementById("mensajeCopiado");
+                mensaje.style.display = "inline";
+                setTimeout(() => mensaje.style.display = "none", 2000);
+            });
         });
 
-        // Función para copiar el texto al portapapeles
-        document.getElementById('copiarTexto').addEventListener('click', function() {
-            let texto = document.getElementById('transcripcionMicrofono').textContent;
-            let botonCopiar = this;
-
-            if (texto) {
-                navigator.clipboard.writeText(texto).then(function() {
-                    // Cambiar el texto del botón y agregar la palomita
-                    botonCopiar.innerHTML = '✔ Copiado';
-                    botonCopiar.style.backgroundColor = '#4CAF50';  // Cambiar color a verde
-
-                    // Después de 2 segundos, restaurar el estado original del botón
-                    setTimeout(function() {
-                        botonCopiar.innerHTML = 'Copiar al Portapapeles';
-                        botonCopiar.style.backgroundColor = '#00529c';  // Color original
-                    }, 2000);
-                }).catch(function(error) {
-                    alert('Error al copiar el texto: ' + error);
-                });
-            }
-        });
-
-        document.getElementById('agregarComandoBtn').addEventListener('click', function() {
-            let input = document.getElementById('comandoTexto').value.split(',');
+        document.getElementById("agregarComandoBtn").addEventListener("click", function() {
+            let input = document.getElementById("comandoTexto").value.split(',');
             if (input.length === 2) {
                 let comando = input[0].trim().toLowerCase();
                 let simbolo = input[1].trim();
@@ -114,16 +89,16 @@
             }
         });
 
-        document.getElementById('mostrarComandosBtn').addEventListener('click', function() {
-            let container = document.getElementById('comandosContainer');
+        document.getElementById("mostrarComandosBtn").addEventListener("click", function() {
+            let container = document.getElementById("comandosContainer");
             container.style.display = container.style.display === 'none' ? 'block' : 'none';
         });
 
         function actualizarListaComandos() {
-            let lista = document.getElementById('listaComandos');
+            let lista = document.getElementById("listaComandos");
             lista.innerHTML = "";
             for (let comando in comandos) {
-                let li = document.createElement('li');
+                let li = document.createElement("li");
                 li.textContent = `${comando} → ${comandos[comando]}`;
                 lista.appendChild(li);
             }

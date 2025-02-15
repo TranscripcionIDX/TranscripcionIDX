@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('imagen.jpg'); /* Asegura que el archivo esté en la misma carpeta */
+    background-image: url('imagen.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -11,17 +11,32 @@ body {
     background-color: #ffffff;
 }
 
+h1 {
+    text-align: center;
+    margin-top: 84px;
+    color: #BA007C;
+    margin-left: 300px;
+}
+
 /* Contenedor del editor */
 #editor-container {
     max-width: 800px;
     margin: 20px auto;
-    background: rgba(255, 255, 255, 0.9); /* Fondo semitransparente para mejor visibilidad */
+    background: rgba(255, 255, 255, 0.9);
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Botones */
+/* Editor de texto de Quill */
+#editor {
+    height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
+}
+
+/* Estilos para los botones */
 button {
     display: block;
     width: 200px;
@@ -40,7 +55,20 @@ button:hover {
     background-color: #6b1521;
 }
 
-/* Ajustes responsivos */
+/* Contenedor de comandos */
+#comandosContainer {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 150px;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsividad */
 @media (max-width: 600px) {
     body {
         padding: 10px;

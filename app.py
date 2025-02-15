@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, send_file
 import os
-from odf.opendocument import OpenDocumentText
-from odf.text import P
+from docx import Document
 
 app = Flask(__name__)
 
@@ -21,39 +20,29 @@ def guardar_en_archivo(texto, nombre_archivo):
         print(f"Error al guardar en {nombre_archivo}: {e}")
         return False
 
-@app.route('/guardar_transcripcion_odt', methods=['POST'])
-def guardar_transcripcion_odt():
+@app.route('/guardar_transcripcion', methods=['POST'])
+def guardar_transcripcion():
     data = request.json
     texto = data.get("texto", "")
-
+    archivo = data.get("archivo", "")
     if not texto:
         return jsonify({"error": "No hay texto para guardar"}), 400
-    
-    # Crear el archivo ODT
-    doc = OpenDocumentText()
-    
-    # Aquí se puede añadir la transcripción con una codificación adecuada
-    p = P(text=texto)  # El texto se pasa tal cual
-    doc.text.addElement(p)
-
-    # Guardar el archivo con el nombre específico
-    try:
-        doc.save("transcripcion.odt")  # Guardamos el archivo en la misma carpeta
-        return jsonify({"mensaje": "Archivo ODT creado correctamente."}), 200
-    except Exception as e:
-        return jsonify({"error": f"Error al guardar el archivo ODT: {e}"}), 500
-
-@app.route('/descargar_transcripcion', methods=['GET'])
-def descargar_transcripcion():
-    archivo = request.args.get("archivo", "transcripcion.odt")
-    
-    if archivo not in ["transcripcion_audio.txt", "transcripcion_microfono.txt", "transcripcion.odt"]:
+    if archivo not in ["transcripcion_audio.txt", "transcripcion_microfono.txt"]:
         return jsonify({"error": "Nombre de archivo no válido"}), 400
-    
-    if os.path.exists(archivo):
-        return send_file(archivo, as_attachment=True)
+    if guardar_en_archivo(texto, archivo):
+        return jsonify({"mensaje": f"Transcripción guardada en {archivo}"}), 200
     else:
-        return jsonify({"error": "Archivo no encontrado"}), 404
+        return jsonify({"error": "Error al guardar la transcripción"}), 500
+
+@app.route('/exportar_word', methods=['POST'])
+def exportar_word():
+    data = request.json
+    contenido = data.get("contenido", "")
+    doc = Document()
+    doc.add_paragraph(contenido)
+    nombre_archivo = "transcripcion.docx"
+    doc.save(nombre_archivo)
+    return send_file(nombre_archivo, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)

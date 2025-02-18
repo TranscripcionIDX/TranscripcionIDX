@@ -1,4 +1,4 @@
-/* Estilos generales para el cuerpo de la página */
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -13,9 +13,8 @@ body {
 
 h1 {
     text-align: center;
-    margin-top: 84px;
+    margin-top: 50px;
     color: #BA007C;
-    margin-left: 300px;
 }
 
 /* Contenedor del editor */
@@ -28,7 +27,7 @@ h1 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Editor de texto de Quill */
+/* Editor de Quill */
 #editor {
     height: 300px;
     border: 1px solid #ccc;
@@ -36,7 +35,7 @@ h1 {
     background: white;
 }
 
-/* Estilos para los botones */
+/* Botones */
 button {
     display: block;
     width: 200px;

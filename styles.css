@@ -25,6 +25,7 @@ h1 {
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: justify;
 }
 
 /* Editor de Quill */
@@ -65,20 +66,4 @@ button:hover {
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsividad */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-    h1 {
-        font-size: 24px;
-    }
-    button {
-        width: 100%;
-    }
-    #editor-container {
-        width: 100%;
-    }
 }

@@ -18,10 +18,11 @@
     <button id="grabarBtn">Iniciar Transcripción</button>
     <button id="borrarTexto">Borrar Todo</button>
     <button id="copiarTexto">Copiar Texto</button>
+    <button id="mayusculasBtn">Convertir a Mayúsculas</button>
     <span id="mensajeCopiado" style="display:none;">¡Texto copiado!</span>
 
     <button id="mostrarComandosBtn">Mostrar Comandos</button>
-    <div id="comandosContainer">
+    <div id="comandosContainer" style="display: none;">
         <h3>Comandos Disponibles:</h3>
         <ul id="listaComandos"></ul>
         <input type="text" id="comandoTexto" placeholder="Ej: coma, .">
@@ -31,13 +32,21 @@
     <script>
         var quill = new Quill('#editor', {
             theme: 'snow',
-            placeholder: 'Escribe aquí o usa la transcripción...'
+            placeholder: 'Escribe aquí o usa la transcripción...',
+            formats: ['bold', 'italic', 'underline', 'strike', 'align'],
         });
 
         let recognition;
         let grabando = false;
-        let comandos = { "coma": ",", "punto": "." };
-        let ultimaTranscripcion = ""; // Guarda la última transcripción para evitar repeticiones
+        let comandos = {
+            "coma": ",",
+            "punto": ".",
+            "abro paréntesis": "(",
+            "cierro paréntesis": ")",
+            "aparte": ".\n",
+            "guión": "-"
+        };
+        let ultimaTranscripcion = "";
 
         document.getElementById("grabarBtn").addEventListener("click", function() {
             grabando = !grabando;
@@ -50,24 +59,20 @@
                 recognition.lang = 'es-ES';
 
                 recognition.onresult = function(event) {
-                    let texto = event.results[event.results.length - 1][0].transcript.toLowerCase().trim(); // Obtener solo la última transcripción
+                    let texto = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
 
-                    // Reemplazar comandos de voz con símbolos
                     for (let comando in comandos) {
                         texto = texto.replace(new RegExp(`\\b${comando}\\b`, "g"), comandos[comando]);
                     }
 
-                    texto = texto.trim(); // Limpiar espacios innecesarios
+                    if (texto.includes('.')) {
+                        texto = texto.replace(/(?:\.\s*|\.\n)(\w)/g, (match, p1) => ". " + p1.toUpperCase());
+                    }
 
-                    // Evitar repeticiones del mismo texto
                     if (texto !== ultimaTranscripcion && texto.length > 0) {
                         let range = quill.getSelection();
-                        if (range) {
-                            quill.insertText(range.index, texto + " ");
-                        } else {
-                            quill.insertText(quill.getLength(), texto + " ");
-                        }
-                        ultimaTranscripcion = texto; // Guardar la última transcripción
+                        quill.insertText(range ? range.index : quill.getLength(), texto + " ");
+                        ultimaTranscripcion = texto;
                     }
                 };
 
@@ -91,15 +96,13 @@
             });
         });
 
-        document.getElementById("agregarComandoBtn").addEventListener("click", function() {
-            let input = document.getElementById("comandoTexto").value.split(',');
-            if (input.length === 2) {
-                let comando = input[0].trim().toLowerCase();
-                let simbolo = input[1].trim();
-                comandos[comando] = simbolo;
-                actualizarListaComandos();
-            } else {
-                alert("Formato incorrecto. Usa: 'palabra', 'símbolo'");
+        document.getElementById("mayusculasBtn").addEventListener("click", function() {
+            let selection = quill.getSelection();
+            if (selection && selection.length > 0) {
+                let selectedText = quill.getText(selection.index, selection.length);
+                let upperText = selectedText.toUpperCase();
+                quill.deleteText(selection.index, selection.length);
+                quill.insertText(selection.index, upperText);
             }
         });
 

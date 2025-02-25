@@ -44,7 +44,9 @@
             "abro paréntesis": "(",
             "cierro paréntesis": ")",
             "aparte": ".\n",
-            "guión": "-"
+            "guión": "-",
+            "comillas": '"',
+            "doble": ":\n",
         };
         let ultimaTranscripcion = "";
 
@@ -65,9 +67,14 @@
                         texto = texto.replace(new RegExp(`\\b${comando}\\b`, "g"), comandos[comando]);
                     }
 
-                    if (texto.includes('.')) {
-                        texto = texto.replace(/(?:\.\s*|\.\n)(\w)/g, (match, p1) => ". " + p1.toUpperCase());
-                    }
+                    // Capitalizar la primera letra después de un punto o dos puntos
+                    // Elimina espacios antes de un punto o dos puntos y corrige mayúsculas después
+                    texto = texto.replace(/\s+([.:])/g, "$1"); // Elimina espacios antes de "." y ":"
+                    // Capitalizar solo después de ".", ":", y no después de pausas normales
+                    texto = texto.replace(/(?:[.:]\s+)([a-z])/g, (match, p1) => match[0] + p1.toUpperCase());
+
+
+
 
                     if (texto !== ultimaTranscripcion && texto.length > 0) {
                         let range = quill.getSelection();
